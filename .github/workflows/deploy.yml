@@ -1,0 +1,24 @@
+name: Website Deploy
+on:
+  push:
+    branches: main
+
+jobs:
+  website-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Deploy website to cloud hosted server
+        uses: appleboy/scp-action@master
+        env:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+        with:
+          source: 'dist/*'
+          target: '/var/www/html/creative-nature.s3.co.ke'
+          strip_components: 1
+          overwrite: true
